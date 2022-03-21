@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS").split(" ")
+
 DATABASE = {
     "ENGINE" : os.environ.get('DB_BACKEND',default='postgresql'),
     "NAME" : os.environ.get('DB_NAME'),

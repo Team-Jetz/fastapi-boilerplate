@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
 from app.blog.models import Post, Votes
-from sqlalchemy import update, desc
+from sqlalchemy import update, desc, func
 from custom_functions import image_editor
 
 from custom_functions.query import dynamic_update
@@ -27,11 +27,25 @@ def create_post(db: Session, request, image, current_user):
 
 
 def get_posts(db: Session, limit, skip, search):
-    return db.query(Post).filter(Post.title.contains(search)).order_by(desc(Post.created_at)).limit(limit).offset(skip).all()
+    results = db.query(
+        Post, func.count(Votes.post_id).label("votes")
+    ).join(
+        Votes, Votes.post_id == Post.id, isouter=True
+    ).group_by(Post.id).filter(
+        Post.title.contains(search)
+    ).order_by(desc(Post.created_at)).limit(limit).offset(skip).all()
+
+    # post = db.query(Post).filter(Post.title.contains(search)).order_by(desc(Post.created_at)).limit(limit).offset(skip).all()
+
+    return results
 
 
 def get_post(db: Session, id):
-    return db.query(Post).filter(Post.id == id).first()
+    return db.query(
+        Post, func.count(Votes.post_id).label("votes")
+    ).join(
+        Votes, Votes.post_id == Post.id, isouter=True
+    ).group_by(Post.id).filter(Post.id == id).first()
 
 
 def update_post(db: Session, id, request, image, current_user):

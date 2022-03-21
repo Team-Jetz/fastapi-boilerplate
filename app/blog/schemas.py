@@ -25,6 +25,7 @@ class PostBaseUpdate(BaseModel):
     image_url: Optional[str]
     remove_image: bool = False
 
+
 class PostDisplay(BaseModel):
     id: UUID
     title: str
@@ -34,6 +35,14 @@ class PostDisplay(BaseModel):
     created_at: datetime
 
     author: Optional[Author]
+
+    class Config():
+        orm_mode = True
+
+
+class PostVoteDisplay(BaseModel):
+    Post: PostDisplay
+    votes: int
 
     class Config():
         orm_mode = True
