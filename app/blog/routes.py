@@ -32,7 +32,7 @@ def create_posts(request: PostBase = Depends(), image: UploadFile = File(None), 
     return views.create_post(db, request, image, current_user)
 
 
-@router.get("/{id}", response_model=PostVoteDisplay)
+@router.get("/{id}/", response_model=PostVoteDisplay)
 def get_post(id: UUID, db:Session = Depends(get_db)):
     return views.get_post(db, id)
 
@@ -47,6 +47,6 @@ def delete_post(id: UUID, db:Session = Depends(get_db), current_user: UserAuth =
     return views.delete_post(db, id, current_user)
 
 
-@router.post("/{id}/vote")
+@router.post("/{id}/vote/")
 def vote(id: UUID, db:Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
     return views.vote(db, id, current_user)

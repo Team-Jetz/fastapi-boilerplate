@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from settings.config import CORS_ALLOWED_ORIGINS
@@ -27,6 +28,7 @@ app.include_router(BlogRouter.router)
 
 @app.get("/")
 async def root():
+    print(datetime.now())
     return {
         "message":"Hello World"
     }

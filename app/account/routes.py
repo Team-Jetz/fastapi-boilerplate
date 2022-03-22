@@ -62,7 +62,7 @@ def create_users(request: UserBase, db: Session  = Depends(get_db)):
     return views.create_user(db, request)
 
 
-@router.get("/{id}")
+@router.get("/{id}/")
 def get_user(id):
     post =  id
     return post

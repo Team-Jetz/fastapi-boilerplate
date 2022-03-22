@@ -8,7 +8,7 @@ from settings.databases import get_db
 from app.account import views as UserView
 
 from settings.config import JWT as SettingsJWT
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login/")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
   to_encode = data.copy()
