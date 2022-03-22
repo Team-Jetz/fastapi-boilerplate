@@ -3,7 +3,7 @@ import uuid
 from fastapi import HTTPException, status
 from sqlalchemy import or_
 from sqlalchemy.orm.session import Session
-from app.account.models import ActivationToken, PasswordReset, User
+from app.account.models import ActivationToken, BlackListedToken, PasswordReset, User
 
 from app.account.views import check_if_email_exists, find_user_by_username
 from app.authentication.oauth import create_access_token
@@ -37,6 +37,20 @@ def login(db: Session, request):
         'token_type':'bearer',
         'user_id': user.id,
         'username': user.username
+    }
+
+
+def logout(db: Session, token: str, current_user):
+    black_listed_token = BlackListedToken(
+        user_id = current_user.id,
+        access_token = token
+    )
+    db.add(black_listed_token)
+    db.commit()
+
+    return {
+        "code": 200,
+        "message": "You have successfully logged-out from your account."
     }
 
 

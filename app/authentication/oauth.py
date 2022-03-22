@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from fastapi import HTTPException, Depends, status
 from sqlalchemy.orm import Session
+from app.account.models import BlackListedToken
 from settings.databases import get_db
 from app.account import views as UserView
 
@@ -24,6 +25,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
   return encoded_jwt
 
 
+def get_token(token: str = Depends(oauth2_scheme)):
+  return token
+
+
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
   credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -36,6 +41,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
     if username is None:
       raise credentials_exception
+
+    blacklisted = db.query(BlackListedToken).filter(BlackListedToken.access_token == token).first()
+
+    if blacklisted:
+        raise HTTPException(
+          status_code=status.HTTP_401_UNAUTHORIZED, 
+          detail="Your token is already expired or blacklisted."
+      )
 
   except JWTError:
     raise credentials_exception

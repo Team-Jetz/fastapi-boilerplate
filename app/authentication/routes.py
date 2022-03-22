@@ -4,7 +4,7 @@ from fastapi.exceptions import HTTPException
 
 from sqlalchemy.orm.session import Session
 from app.account.models import User
-from app.authentication.oauth import get_current_user
+from app.authentication.oauth import get_current_user, get_token
 from app.authentication.schemas import ActivateEmail, ConfirmAccountActivation, ForgotPassword, PasswordChange, PasswordReset, UserAuth
 from app.authentication import views
 
@@ -19,9 +19,17 @@ router = APIRouter(
 )
 
 
+
+
+
 @router.post('/login/')
 def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     return views.login(db, request)
+
+
+@router.post('/logout/')
+def logout(token: str =  Depends(get_token), db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
+    return views.logout(db, token, current_user)
 
 
 @router.post('/forgot-password/',status_code=status.HTTP_200_OK)

@@ -1,8 +1,10 @@
+from enum import unique
 from settings.databases import Base
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.sql import expression
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.orm import relationship
 from uuid import uuid4
 
@@ -46,3 +48,10 @@ class ActivationToken(Base):
     expires_in = Column(TIMESTAMP(timezone=True), nullable=False)
     is_expired = Column(Boolean, server_default=expression.false(), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=expression.text('now()'))
+
+
+class BlackListedToken(Base):
+    __tablename__ = 'black_listed_tokens'
+
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id', ondelete="CASCADE"), primary_key=True)
+    access_token = Column(String(255), unique=True)
