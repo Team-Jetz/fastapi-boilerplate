@@ -25,6 +25,8 @@ WORKDIR /usr/src/app
 RUN apt update && \
     apt upgrade -y && \
     apt install -y netcat-openbsd gcc libpq-dev && \
+    apt install -y default-libmysqlclient-dev && \
+    apt install -y tk && \
     apt install -y curl
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .

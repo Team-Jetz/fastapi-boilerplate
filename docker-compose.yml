@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+
+  api:
+    image: ghcr.io/sme-soft-inc/trakdils_backend:latest
+    environment:
+      APP_NAME: ${APP_NAME?Variable not set}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES?Variable not set}
+      SECRET_KEY: ${SECRET_KEY?Variable not set}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS?Variable not set}
+
+      AWS_REGION: ${AWS_REGION?Variable not set}
+      AWS_BUCKET_NAME: ${AWS_BUCKET_NAME?Variable not set}
+      AWS_HOST_NAME: ${AWS_HOST_NAME?Variable not set}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY?Variable not set}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY?Variable not set}
+
+      MAIL_USERNAME: ${MAIL_USERNAME?Variable not set}
+      MAIL_PASSWORD: ${MAIL_PASSWORD?Variable not set}
+      MAIL_FROM: ${MAIL_FROM?Variable not set}
+      MAIL_PORT: ${MAIL_PORT?Variable not set}
+      MAIL_SERVER: ${MAIL_SERVER?Variable not set}
+      MAIL_TLS: ${MAIL_TLS?Variable not set}
+      MAIL_SSL: ${MAIL_SSL?Variable not set}
+      USE_CREDENTIALS: ${USE_CREDENTIALS?Variable not set}
+
+  my-database:
+    image: mariadb:10.6
+    environment:
+      MARIADB_DATABASE: ${DB_NAME?Variable not set}
+      MARIADB_USER: ${DB_USER?Variable not set}
+      MARIADB_PASSWORD: ${DB_PASSWORD?Variable not set}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD?Variable not set}
+    volumes:
+      - database:/var/lib/mysql
+      
+  database-ui:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: my-database
+    # ports:
+    #   - 9091:80
+    
+volumes:
+  database:
+
+networks:
+  default:
+    external:
+      name: my-public

@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 from fastapi_mail import ConnectionConfig
 load_dotenv()
 
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS").split(" ")
+APP_NAME = os.environ.get('APP_NAME', default='application_name')
+
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(" ")
 
 FRONTEND_DOMAIN = os.environ.get('FRONTEND_DOMAIN')
 
 DATABASE = {
-    "ENGINE" : os.environ.get('DB_BACKEND',default='postgresql'),
+    "ENGINE" : os.environ.get('DB_BACKEND',default='mysql+mysqlconnector'),
     "NAME" : os.environ.get('DB_NAME'),
     "USER" : os.environ.get('DB_USER'),
     "PASSWORD" : os.environ.get('DB_PASSWORD'),
