@@ -1,16 +1,17 @@
 """Initial
 
-Revision ID: 9adb0d68abec
+Revision ID: 517650e0d6a1
 Revises: 
-Create Date: 2022-03-25 22:29:34.168020
+Create Date: 2022-03-26 18:35:18.639440
 
 """
 from alembic import op
 import sqlalchemy as sa
+import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
-revision = '9adb0d68abec'
+revision = '517650e0d6a1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,7 +45,7 @@ def upgrade():
     op.create_index(op.f('ix_password_resets_reset_code'), 'password_resets', ['reset_code'], unique=False)
     op.create_table('users',
     sa.Column('id', sqlalchemy_utils.types.uuid.UUIDType(binary=False), nullable=False),
-    sa.Column('username', sa.String(), nullable=False),
+    sa.Column('username', sa.String(length=255), nullable=False),
     sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('is_active', sa.Boolean(), server_default=sa.text('false'), nullable=False),
@@ -65,7 +66,7 @@ def upgrade():
     )
     op.create_table('posts',
     sa.Column('id', sqlalchemy_utils.types.uuid.UUIDType(binary=False), nullable=False),
-    sa.Column('title', sa.String(), nullable=False),
+    sa.Column('title', sa.String(length=255), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('published', sa.Boolean(), server_default=sa.text('true'), nullable=False),
     sa.Column('image_url', sa.String(length=255), nullable=True),

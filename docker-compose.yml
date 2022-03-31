@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   api:
-    image: ghcr.io/sme-soft-inc/trakdils_backend:latest
+    image: ghcr.io/team-jetz/fastapi-boilerplate:latest
     environment:
       APP_NAME: ${APP_NAME?Variable not set}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES?Variable not set}

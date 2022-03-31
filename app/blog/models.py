@@ -13,7 +13,7 @@ class Post(Base):
     __tablename__ = 'posts'
 
     id = Column(UUIDType(binary=False), primary_key=True, default=uuid4, nullable=False)
-    title =  Column(String, nullable=False)
+    title =  Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
     published = Column(Boolean, server_default=expression.true(), nullable=False)
     image_url = Column(String(255), nullable=True)
